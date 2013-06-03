@@ -30,6 +30,7 @@
                 initOnFirstSection      : true,     // Scroll to the first section on init
                 createNavigation        : true,     // Create a navigation
                 navigationPosition      : "r",      // Position of the navigation to fix appearance (null if you don't want to)
+                customNav               : false,    // If the plugin has to consider custom links for the navigation
                 debugMode               : false
         	},
         	s,
@@ -47,6 +48,7 @@
             _wheelDelay         = null,
             _scroolPaused       = null,
             _nav                = null,
+            _customLinks        = null,
             _isIE8orLater       = false;
         
         s = $.extend(defaults,options);
@@ -79,6 +81,9 @@
                 _isIE8orLater = true;
 
         	_controls_initAll();
+
+            if(s.customNav)
+                _navigation_customNav_init();
 
             if(s.createNavigation)
                 _navigation_create();
@@ -164,6 +169,12 @@
         {
             var $links = $('.'+s.prefixName+'-link', _nav),
                 currentClassName = s.prefixName+'-link-current';
+            
+            if(_customLinks){
+                for (var i = 0; i < _customLinks.length; i++) {
+                    $links.push(_customLinks[i])
+                }
+            }
 
             if(isInit)
             {
@@ -191,11 +202,30 @@
                 if(_currentStep==linkedStep)
                 {   
                     $link.addClass(currentClassName);
-                    return false;
+                    if( !_customLinks ) return false;
                 }
             });
+        }
 
+        /*
+        | Navigation : Init Custom navigation
+        |
+        | Init custom navigation provide by the user to work within the plugin
+        |
+        | 
+        */
+        function _navigation_customNav_init()
+        {
+            _customLinks = $('a.'+s.prefixName+'-customLink');
 
+            _customLinks.each(function(){
+                var $customLink = $(this),
+                    sectionId = $customLink.attr('href').substr(1);
+                
+                $customLink.data(s.prefixName, {
+                    sectionPosition : _sectionsIdsArray.indexOf(sectionId)
+                });
+            });
         }
 
         /* ---------------------------------------------------------------------------------

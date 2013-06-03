@@ -19,6 +19,11 @@
 </head>
 <body>
 
+<nav id="customNav">
+	<a href="#about" title="About page" class="scrollsections-customLink">About</a>
+	<a href="#clients" title="About page" class="scrollsections-customLink">About</a>
+</nav>
+
 <section id="home" class="scrollsections">
 </section>
 
@@ -47,10 +52,13 @@
 <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 
 <script src="js/plugins.js"></script>
-<script src="js/jquery.scrollsections.min.js"></script>
+<script src="js/jquery.scrollsections.js"></script>
+<!-- <script src="js/jquery.scrollsections.min.js"></script> -->
 <script>
 	$(function() {
-		$('section.scrollsections').scrollsections();
+		$('section.scrollsections').scrollsections({
+			customNav : true
+		});
 	});
 </script>
 
